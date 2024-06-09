@@ -1,13 +1,34 @@
-import express from 'express'
+import express, { request } from 'express'
+import bookRoutes from './routes/bookRoutes.js'
+
+import dotenv from 'dotenv'
+import mongoose from 'mongoose'
+dotenv.config()
 
 const app = express()
-const PORT = 5000
+app.use(express.json())
+const PORT = process.env.PORT || 5500
+
+app.use('/', bookRoutes)
 
 app.get('/', (request, response) => {
   console.log(request)
   return response.status(200).send('Welcome to MERN Store')
 })
 
-app.listen(PORT, () => {
-  console.log(`Server started on port: ${PORT}`)
-})
+const startServer = async () => {
+  console.log('Starting server...')
+  console.log('Connecting to database...')
+  try {
+    await mongoose.connect(process.env.MONGODB_URL)
+    console.log('Success connect to database')
+
+    app.listen(process.env.PORT, () => {
+      console.log(`Server started on port: ${PORT}`)
+    })
+  } catch (error) {
+    console.error('Error connecting to the database', error)
+  }
+}
+
+startServer()
