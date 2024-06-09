@@ -1,5 +1,12 @@
-import { ModeToggle } from "./components/ui/mode-toggle";
+import Header from "./components/header";
+import { BookTable } from "./components/table";
+import Layout from "./components/layout";
 
 export const App = () => {
-  return <ModeToggle />;
+  return (
+    <Layout>
+      <Header />
+      <BookTable />
+    </Layout>
+  );
 };
