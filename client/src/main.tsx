@@ -4,13 +4,20 @@ import { App } from "./App";
 import "./index.css";
 import { ThemeProvider } from "./components/ui/theme-provider";
 import { BrowserRouter } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
+const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <App />
-      </ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+          <App />
+        </ThemeProvider>
+        <ReactQueryDevtools initialIsOpen={true} />
+      </QueryClientProvider>
     </BrowserRouter>
   </React.StrictMode>,
 );

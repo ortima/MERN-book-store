@@ -1,5 +1,5 @@
 import Header from "./components/header";
-import { BookTable } from "./components/table";
+import { BookTable } from "./components/Table/table";
 import Layout from "./components/layout";
 
 export const App = () => {

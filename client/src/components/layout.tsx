@@ -1,7 +1,8 @@
-import { PropsWithChildren } from "react";
 import Sidebar from "./sidebar";
 
-interface LayoutProps extends PropsWithChildren {}
+interface LayoutProps {
+  children: React.ReactNode;
+}
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
