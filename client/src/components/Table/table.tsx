@@ -20,10 +20,12 @@ import { Table, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BookTableBody } from "./BookTableBody";
 import { useBooksQuery } from "@/hooks/useBooksQuery";
+import { AddNewBookModal } from "../modal";
+import { useState } from "react";
 
 export const BookTable = () => {
   const { isSuccess, isLoading, data, isError } = useBooksQuery();
-
+  const [isOpen, setIsOpen] = useState(true);
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
       <Tabs defaultValue="all">
@@ -62,11 +64,14 @@ export const BookTable = () => {
                 Export
               </span>
             </Button>
-            <Button size="sm" className="h-8 gap-1">
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-8 gap-1"
+              onClick={() => setIsOpen(!isOpen)}
+            >
               <PlusCircle className="h-3.5 w-3.5" />
-              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                Add Product
-              </span>
+              Add book
             </Button>
           </div>
         </div>
@@ -115,6 +120,7 @@ export const BookTable = () => {
           </Card>
         </TabsContent>
       </Tabs>
+      <AddNewBookModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </main>
   );
 };
