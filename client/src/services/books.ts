@@ -31,12 +31,15 @@ export const addNewBook = async (
       body: JSON.stringify(data),
     });
     if (!response.ok) {
-      throw new Error(`Error fetching data ${response.statusText}`);
+      const errorData = await response.json();
+      throw new Error(
+        errorData.message || `Error fetching data ${response.statusText}`,
+      );
     }
     return await response.json();
   } catch (error: unknown) {
     if (error instanceof Error) {
-      throw new Error(`Error fetching data: ${error.message}`);
+      throw error;
     } else {
       throw new Error("An unknown error occurred");
     }

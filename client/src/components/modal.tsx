@@ -21,6 +21,7 @@ import { z } from "zod";
 import { Button } from "./ui/button";
 import { IBook } from "@/types/books";
 import { useAddNewBook } from "@/hooks/useBooksQuery";
+import { Loader2 } from "lucide-react";
 
 interface AddNewBookModalProps {
   setIsOpen: (value: boolean) => void;
@@ -87,6 +88,7 @@ export const AddNewBookModal: React.FC<AddNewBookModalProps> = ({
     mutate: addNewBookMutation,
     isPending,
     isError,
+    isSuccess,
     error,
   } = useAddNewBook();
 
@@ -94,16 +96,19 @@ export const AddNewBookModal: React.FC<AddNewBookModalProps> = ({
     data: Omit<IBook, "updatedAt" | "createdAt" | "_id" | "__v">,
   ) => {
     try {
-      addNewBookMutation(data);
-      setIsOpen(false);
-      form.reset();
+      addNewBookMutation(data, {
+        onSuccess: () => {
+          setIsOpen(false);
+          form.reset();
+        },
+      });
     } catch (error) {
       console.error("Error adding new book:", error);
     }
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={() => setIsOpen(!isOpen)}>
+    <Dialog open={isOpen} onOpenChange={() => !isPending && setIsOpen(!isOpen)}>
       <DialogOverlay className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
         <Card className="w-[450px] p-4">
           <DialogContent className="flex w-full flex-col gap-2 rounded-lg p-4 shadow-lg">
@@ -125,6 +130,7 @@ export const AddNewBookModal: React.FC<AddNewBookModalProps> = ({
                         <FormLabel>{label}</FormLabel>
                         <FormControl>
                           <Input
+                            disabled={isPending}
                             type={type}
                             placeholder={placeholder}
                             {...field}
@@ -139,14 +145,22 @@ export const AddNewBookModal: React.FC<AddNewBookModalProps> = ({
                   <Button
                     type="button"
                     variant="outline"
+                    disabled={isPending}
                     onClick={() => setIsOpen(false)}
                   >
                     Cancel
                   </Button>
-                  <Button type="submit">Save changes</Button>
+                  <Button type="submit" disabled={isPending}>
+                    {isPending && (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
+                    Save changes
+                  </Button>
                 </div>
               </form>
+              //TODO: NEED TO ADD TOASTER FOR THESE:
               {isPending && <p>Adding book...</p>}
+              {isSuccess}
               {isError && <p>Error adding book: {error?.message}</p>}
             </Form>
           </DialogContent>

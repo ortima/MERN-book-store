@@ -1,6 +1,6 @@
 import { addNewBook, fetchBooks } from "@/services/books";
 import { IBook } from "@/types/books";
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useBooksQuery = () => {
   return useQuery({
@@ -10,18 +10,20 @@ export const useBooksQuery = () => {
 };
 
 export const useAddNewBook = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (
       data: Omit<IBook, "updatedAt" | "createdAt" | "_id" | "__v">,
     ) => addNewBook(data),
     mutationKey: ["addNewBook"],
 
-    onError: (err) => {
-      console.log(err);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onError: (err: any) => {
+      console.log(err.response?.data?.message || err.message);
     },
     onSuccess: () => {
-      //TODO: NEED TO FIX REVALIDATE
-      new QueryClient().invalidateQueries({ queryKey: ["books"] });
+      queryClient.invalidateQueries({ queryKey: ["books"] });
     },
   });
 };
