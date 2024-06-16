@@ -79,7 +79,7 @@ export const AddNewBookModal: React.FC<AddNewBookModalProps> = ({
     defaultValues: {
       title: "",
       author: "",
-      price: 0,
+      price: "",
       publishYear: 2024,
     },
   });
@@ -158,10 +158,6 @@ export const AddNewBookModal: React.FC<AddNewBookModalProps> = ({
                   </Button>
                 </div>
               </form>
-              //TODO: NEED TO ADD TOASTER FOR THESE:
-              {isPending && <p>Adding book...</p>}
-              {isSuccess}
-              {isError && <p>Error adding book: {error?.message}</p>}
             </Form>
           </DialogContent>
         </Card>
