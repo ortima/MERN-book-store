@@ -45,3 +45,28 @@ export const addNewBook = async (
     }
   }
 };
+
+export const deleteBookById = async (id: string) => {
+  try {
+    const response = await fetch(`${BASE_URL}/books/${id}`, {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(
+        errorData.message || `Error fetching data ${response.statusText}`,
+      );
+    }
+    return await response.json();
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw error;
+    } else {
+      throw new Error("An unknown error occurred");
+    }
+  }
+};

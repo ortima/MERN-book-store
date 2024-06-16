@@ -84,13 +84,7 @@ export const AddNewBookModal: React.FC<AddNewBookModalProps> = ({
     },
   });
 
-  const {
-    mutate: addNewBookMutation,
-    isPending,
-    isError,
-    isSuccess,
-    error,
-  } = useAddNewBook();
+  const { mutate: addNewBookMutation, isPending } = useAddNewBook();
 
   const onSubmit = async (
     data: Omit<IBook, "updatedAt" | "createdAt" | "_id" | "__v">,

@@ -10,6 +10,7 @@ import { TableCell, TableRow, TableBody } from "../ui/table";
 import { Button } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
 import { IBooksResponse } from "@/types/books";
+import { ConfirmDelete } from "../confirm";
 
 interface BookTableBodyProps {
   isLoading?: boolean;
@@ -94,7 +95,9 @@ export const BookTableBody = ({
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem>Delete</DropdownMenuItem>
+                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                          <ConfirmDelete bookId={book._id} />
+                        </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>

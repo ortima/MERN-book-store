@@ -1,4 +1,4 @@
-import { addNewBook, fetchBooks } from "@/services/books";
+import { addNewBook, deleteBookById, fetchBooks } from "@/services/books";
 import { IBook } from "@/types/books";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
@@ -30,6 +30,7 @@ export const useAddNewBook = () => {
     },
     onMutate: () => {
       toast({
+        duration: Infinity,
         description: "Pending...",
       });
     },
@@ -37,6 +38,37 @@ export const useAddNewBook = () => {
       queryClient.invalidateQueries({ queryKey: ["books"] });
       toast({
         description: "Added new book!",
+      });
+    },
+  });
+};
+
+export const useDeleteBookById = () => {
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => deleteBookById(id),
+    mutationKey: ["deleteBookById"],
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onError: (err: any) => {
+      console.log(err.response?.data?.message || err.message);
+      toast({
+        variant: "destructive",
+        description: `${err.response?.data?.message || err.message}`,
+      });
+    },
+    onMutate: () => {
+      toast({
+        duration: Infinity,
+        description: "Pending...",
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["books"] });
+      toast({
+        description: "Book deleted successfuly!",
       });
     },
   });
